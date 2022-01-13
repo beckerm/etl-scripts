@@ -42,7 +42,7 @@ with open(names_csv, mode='r') as names:
 def get_directors(x):
     dd = [director_names.get(d, '') for d in x]
     # return no more than five directors per movie
-    if len(dd) < 5:
+    if len(dd) <= 5:
         return ', '.join(dd)
     else:
         return dd[0]
