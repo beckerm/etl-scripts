@@ -24,7 +24,8 @@ database = config.get('default', 'database')
 csvpath = config.get('default', 'csvpath')
 
 
-titles_csv = os.path.join(csvpath, 'title.basics.tsv')
+titles_csv = os.path.join(csvpath, '1970.tsv')
+#titles_csv = os.path.join(csvpath, 'title.basics.tsv')
 names_csv = os.path.join(csvpath, 'name.basics.tsv')
 ratings_csv = os.path.join(csvpath, 'title.ratings.tsv')
 crew_csv = os.path.join(csvpath, 'title.crew.tsv')
@@ -85,7 +86,6 @@ final.rename(columns={'tconst': 'imdb_id',
                       }, inplace=True)
 
 
-
 final['votes'] = final['votes'].fillna(0).astype(int)
 
 final_cleaned = final.replace(
@@ -105,13 +105,10 @@ print(list(final.columns.values))
 
 db_data = 'mysql+mysqldb://{}:{}@{}:3306/{}?charset=utf8mb4'.format(
     username, password, hostname, database)
-
-
-engine = create_engine(db_data)
-
-connection = pymysql.connect(
-    host=hostname, user=username, password=password, db=database)
-
-cursor = connection.cursor()
+try:
+    engine = create_engine(db_data)
+except Exception as ex:
+    print('Error connecting to database: ', e)
+    sys.exit()
 
 final_cleaned.to_sql('Film_Titles', engine, if_exists='append', index=False)
